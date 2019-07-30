@@ -6,8 +6,8 @@ public static class CityMetrics {
     public static int blockWidth = 4;
     public static int blockLength = 4;
 
-    public static int buildingWidth = 10;
-    public static int buildingLength = 10;
+    public const int buildingWidth = 10;
+    public const int buildingLength = 10;
 
     public static int streetWidth = 10;
 
@@ -21,5 +21,5 @@ public static class CityMetrics {
     public static int terrainGridLength = 3;
     // has to be an odd number;
 
-    public static float highestBuilding = 60;
+    public const float highestBuilding = 60;
 }
