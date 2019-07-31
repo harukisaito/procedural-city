@@ -1,7 +1,7 @@
 public static class CityMetrics {
-    public static float scaleFactor = 1f;
-    public static int cityGridWidth = 5;
-    public static int cityGridLength = 5;
+    public static float scaleFactor = 0.01f;
+    public static int cityGridWidth = 20;
+    public static int cityGridLength = 20;
 
     public static int blockWidth = 4;
     public static int blockLength = 4;

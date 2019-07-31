@@ -65,6 +65,7 @@
      <Compile Include="Assets\Scripts\Grid Buildings\MountainChunk.cs" />
      <Compile Include="Assets\Scripts\Grid Buildings\MountainGrid.cs" />
      <Compile Include="Assets\Scripts\Grid Buildings\Vertex.cs" />
+     <Compile Include="Assets\Scripts\Mountain Mesh\MountainMesh.cs" />
      <Compile Include="Assets\Scripts\Phyisics Buildings\BuildingSpawner.cs" />
      <Compile Include="Assets\Scripts\Phyisics Buildings\UIManager.cs" />
      <None Include="Assets\Shader\geo.shader" />

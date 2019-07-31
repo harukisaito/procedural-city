@@ -75,12 +75,12 @@ public class BuildingGrid : MonoBehaviour
                 yield return new WaitForSeconds(0.05f);
             }
         }
-        GameObject plane = Instantiate(cityPlane);
-        cityPlaneScale = new Vector3(cityLength, 1, cityWidth) * scaleFactor * 0.25f;
+        // GameObject plane = Instantiate(cityPlane);
+        // cityPlaneScale = new Vector3(cityLength, 1, cityWidth) * scaleFactor * 0.25f;
         OnSpawnedBlocks();
         MoveCityToCenter();
         SetDistance();
-        plane.transform.localScale = cityPlaneScale;
+        // plane.transform.localScale = cityPlaneScale;
     }
 
     private void MoveCityToCenter() {
