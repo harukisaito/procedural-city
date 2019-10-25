@@ -55,19 +55,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Car.cs" />
      <Compile Include="Assets\Scripts\CameraMovement.cs" />
+     <Compile Include="Assets\Scripts\CarMovementDirection.cs" />
+     <Compile Include="Assets\Scripts\CarSpawner.cs" />
      <Compile Include="Assets\Scripts\Grid Buildings\Building.cs" />
      <Compile Include="Assets\Scripts\Grid Buildings\BuildingBlock.cs" />
      <Compile Include="Assets\Scripts\Grid Buildings\BuildingGrid.cs" />
      <Compile Include="Assets\Scripts\Grid Buildings\CityMetrics.cs" />
      <Compile Include="Assets\Scripts\Grid Buildings\Direction.cs" />
      <Compile Include="Assets\Scripts\Grid Buildings\EventManager.cs" />
-     <Compile Include="Assets\Scripts\Grid Buildings\MountainChunk.cs" />
-     <Compile Include="Assets\Scripts\Grid Buildings\MountainGrid.cs" />
-     <Compile Include="Assets\Scripts\Grid Buildings\Vertex.cs" />
-     <Compile Include="Assets\Scripts\Mountain Mesh\MountainMesh.cs" />
      <Compile Include="Assets\Scripts\Phyisics Buildings\BuildingSpawner.cs" />
      <Compile Include="Assets\Scripts\Phyisics Buildings\UIManager.cs" />
+     <Compile Include="Assets\Scripts\Street.cs" />
      <None Include="Assets\Shader\geo.shader" />
      <None Include="Assets\Shader\Flat.shader" />
      <None Include="Assets\Shader\geo2.shader" />

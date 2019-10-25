@@ -16,12 +16,8 @@ public class EventManager : MonoBehaviour
         }
     }
 
-
     private void Start() {
-        Subscribe();
+        BuildingGrid.Instance.SpawnedBlocks += CarSpawner.Instance.OnSpawnedBlocks;
     }
 
-    private void Subscribe() {
-        BuildingGrid.Instance.SpawnedBlocks += MountainGrid.Instance.OnSpawnedBlocks;
-    }
 } 

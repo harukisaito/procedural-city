@@ -17,7 +17,6 @@ public class BuildingGrid : MonoBehaviour
     }
 
     [SerializeField] private BuildingBlock blockSpawner;
-    [SerializeField] private GameObject cityPlane;
     [SerializeField] private AnimationCurve curve;
     private BuildingBlock currentBlock;
 
@@ -33,8 +32,8 @@ public class BuildingGrid : MonoBehaviour
     private int streetWidth = CityMetrics.streetWidth;
     private float scaleFactor = CityMetrics.scaleFactor;
 
-    private int cityLength;
-    private int cityWidth;
+    public int cityLength;
+    public int cityWidth;
 
     private float firstDistance;
 
@@ -49,9 +48,14 @@ public class BuildingGrid : MonoBehaviour
     private BuildingBlock[] blocks;
     public EventHandler SpawnedBlocks;
 
+    public List<Street> streetsXRight;
+    public List<Street> streetsXLeft;
+    public List<Street> streetsZRight;
+    public List<Street> streetsZLeft;
+
     private void Start() {
-        cityLength = gridLength * blockLength * buildingLength;
-        cityWidth = gridWidth * blockWidth * buildingWidth;
+        cityLength = gridLength * blockLength * buildingLength + (streetWidth * (gridLength - 1));
+        cityWidth = gridWidth * blockWidth * buildingWidth + (streetWidth * (gridWidth - 1));
 
         blocks = new BuildingBlock[gridLength * gridWidth];
 
@@ -61,33 +65,136 @@ public class BuildingGrid : MonoBehaviour
     private IEnumerator SpawnBlock() {
         for(int x = 0, i = 0; x < gridLength; x++) {
             for(int z = 0; z < gridWidth; z++, i++) {
-                currentBlock = Instantiate<BuildingBlock>(blockSpawner);
-                currentBlock.transform.SetParent(this.transform);
-                currentBlock.transform.localPosition = 
-                    new Vector3(
-                        ((x * blockLength * buildingLength) + streetWidth * x) * scaleFactor,
-                        0,
-                        ((z * blockWidth * buildingWidth) + streetWidth * z) * scaleFactor
-                    );
-                currentBlock.transform.localScale = 
-                    currentBlock.transform.localScale * scaleFactor;
-                blocks[i] = currentBlock;
-                yield return new WaitForSeconds(0.05f);
+                CreateBlock(x, z, i);
+                CreateStreets(x, z, i);
+
+                yield return new WaitForSeconds(0.01f);
             }
         }
-        // GameObject plane = Instantiate(cityPlane);
-        // cityPlaneScale = new Vector3(cityLength, 1, cityWidth) * scaleFactor * 0.25f;
-        OnSpawnedBlocks();
+        GameObject plane = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        cityPlaneScale = new Vector3(cityLength + 50, 1, cityWidth + 50) * scaleFactor;
         MoveCityToCenter();
         SetDistance();
-        // plane.transform.localScale = cityPlaneScale;
+        plane.transform.localPosition = new Vector3(
+            0,
+            -1f,
+            0
+        );
+        plane.transform.localScale = cityPlaneScale;
+        OnSpawnedBlocks();
+    }
+
+    private void CreateBlock(int x, int z, int i) {
+        currentBlock = Instantiate<BuildingBlock>(blockSpawner);
+        currentBlock.transform.SetParent(this.transform);
+        currentBlock.transform.localPosition = 
+            new Vector3(
+                (((x * blockLength * buildingLength) + streetWidth * x) 
+                    + buildingLength * 0.5f) * scaleFactor,
+                0,
+                (((z * blockWidth * buildingWidth) + streetWidth * z) 
+                    + buildingWidth * 0.5f) * scaleFactor
+            );
+        currentBlock.transform.localScale = 
+            currentBlock.transform.localScale * scaleFactor;
+        blocks[i] = currentBlock;
+    }
+
+    private void CreateStreets(int x, int z, int i) {
+        CreateStreetsX(x, z, i);
+        CreateStreetsZ(x, z, i);
+    }
+
+    private void CreateStreetsX(int x, int z, int i) {
+        if(x == 0 && z < gridWidth - 1) {
+            GameObject streetRightGameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            streetRightGameObject.GetComponent<MeshRenderer>().material.color = Color.red;
+            Street streetRight = streetRightGameObject.AddComponent<Street>();
+            GameObject streetLeftGameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            streetLeftGameObject.GetComponent<MeshRenderer>().material.color = Color.green;
+            Street streetLeft = streetLeftGameObject.AddComponent<Street>();
+            streetRight.transform.SetParent(this.transform);
+            streetRight.transform.localPosition = 
+                new Vector3(
+                    cityLength * 0.5f,
+                    0,
+                    (((z * blockWidth * buildingWidth) + streetWidth * z) 
+                        + blockWidth * buildingWidth + streetWidth * 0.25f + CityMetrics.pavementWidth * 0.5f) 
+                        * scaleFactor 
+                );
+            streetRight.transform.localScale = 
+            new Vector3(
+                cityLength, 
+                1f, 
+                (streetWidth * 0.5f) - CityMetrics.pavementWidth);
+            streetLeft.transform.SetParent(this.transform);
+            streetLeft.transform.localPosition = 
+                new Vector3(
+                    cityLength * 0.5f,
+                    0,
+                    (((z * blockWidth * buildingWidth) + streetWidth * z) 
+                        + blockWidth * buildingWidth + streetWidth * 0.75f
+                         - CityMetrics.pavementWidth * 0.5f) 
+                        * scaleFactor 
+                );
+            streetLeft.transform.localScale = 
+            new Vector3(
+                cityLength, 
+                1f, 
+                (streetWidth * 0.5f) - CityMetrics.pavementWidth);
+            streetsXRight.Add(streetRight);
+            streetsXLeft.Add(streetLeft);
+        }
+    }
+
+    private void CreateStreetsZ(int x, int z, int i) {
+        if(z == 0 && x < gridLength - 1) {
+            GameObject streetRightGameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            streetRightGameObject.GetComponent<MeshRenderer>().material.color = Color.red;
+            Street streetRight = streetRightGameObject.AddComponent<Street>();
+            GameObject streetLeftGameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            streetLeftGameObject.GetComponent<MeshRenderer>().material.color = Color.green;
+            Street streetLeft = streetLeftGameObject.AddComponent<Street>();
+            streetRight.transform.SetParent(this.transform);
+            streetRight.transform.localPosition = 
+                new Vector3(
+                    (((x * blockLength * buildingLength) + streetWidth * x) 
+                        + blockLength * buildingLength + streetWidth * 0.75f - CityMetrics.pavementWidth * 0.5f)
+                        * scaleFactor,
+                    0,
+                    cityWidth * 0.5f
+                );
+            streetRight.transform.localScale = 
+                new Vector3(
+                    (streetWidth * 0.5f) - CityMetrics.pavementWidth, 
+                    1, 
+                    cityWidth
+                    );
+            streetLeft.transform.SetParent(this.transform);
+            streetLeft.transform.localPosition = 
+                new Vector3(
+                    (((x * blockLength * buildingLength) + streetWidth * x) 
+                        + blockLength * buildingLength + streetWidth * 0.25f + CityMetrics.pavementWidth * 0.5f)
+                        * scaleFactor,
+                    0,
+                    cityWidth * 0.5f
+                );
+            streetLeft.transform.localScale = 
+            new Vector3(
+                (streetWidth * 0.5f) - CityMetrics.pavementWidth, 
+                1, 
+                cityWidth
+            );
+            streetsZRight.Add(streetRight);
+            streetsZLeft.Add(streetLeft);
+        }
     }
 
     private void MoveCityToCenter() {
-        float x = (cityLength + (streetWidth * (gridLength - 1))) * scaleFactor;
-        float z = (cityWidth + (streetWidth * (gridWidth - 1))) * scaleFactor;
+        float x = cityLength * scaleFactor;
+        float z = cityWidth * scaleFactor;
         x = x * 0.5f;
-        z = z * 0.5f - 10 * scaleFactor;
+        z = z * 0.5f;
 
         centeredPosition = new Vector3(-x, 0, -z);
         
@@ -115,9 +222,6 @@ public class BuildingGrid : MonoBehaviour
         if(SpawnedBlocks == null) {
             return;
         } 
-
         SpawnedBlocks(this, EventArgs.Empty);
     }
-
-    
 }

@@ -1,5 +1,5 @@
 sceneSetups:
-- path: Assets/Scenes/Grid Buildings.unity
+- path: Assets/Scenes/Mountain Mesh.unity
   isLoaded: 1
   isActive: 1
   isSubScene: 0
